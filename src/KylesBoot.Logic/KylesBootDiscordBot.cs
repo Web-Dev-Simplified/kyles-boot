@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using KylesBoot.Logic.Configuration;
 
 namespace KylesBoot.Logic
 {
@@ -11,6 +12,13 @@ namespace KylesBoot.Logic
 
     public class KylesBootDiscordBot : IKylesBootDiscordBot
     {
+        private IDiscordConfiguration _discordConfig;
+
+        public KylesBootDiscordBot(IDiscordConfiguration discordConfig)
+        {
+            _discordConfig = discordConfig;
+        }
+
         public Task StartAsync()
         {
             Console.WriteLine("Started!");

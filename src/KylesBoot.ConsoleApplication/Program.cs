@@ -2,6 +2,8 @@
 using System;
 using System.Threading.Tasks;
 using KylesBoot.Logic;
+using KylesBoot.Logic.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace KylesBoot.ConsoleApplication
 {
@@ -24,7 +26,27 @@ namespace KylesBoot.ConsoleApplication
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IKylesBootDiscordBot, KylesBootDiscordBot>();
 
+
+            // Set up configuration
+            var configurationPath = GetConfigurationPath();
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile(configurationPath)
+                .Build();
+
+            var discordConfiguration = new DiscordConfiguration();
+            configuration.Bind("DiscordConfiguration", discordConfiguration);
+            serviceCollection.AddSingleton<IDiscordConfiguration>(discordConfiguration);
+
             return serviceCollection.BuildServiceProvider();
+        }
+
+        private static string GetConfigurationPath()
+        {
+#if DEBUG
+            return @"appsettings.Development.json";
+#else
+            return @"appsettings.json";
+#endif
         }
     }
 }
