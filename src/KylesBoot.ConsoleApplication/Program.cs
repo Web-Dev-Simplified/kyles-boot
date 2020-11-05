@@ -14,7 +14,7 @@ namespace KylesBoot.ConsoleApplication
             var serviceProvider = GetServiceProvider();
             var bot = serviceProvider.GetService<IKylesBootDiscordBot>();
 
-            await bot.StartAsync();
+            await bot.StartAsync(serviceProvider);
 
             // Wait indefinitely for now
             await Task.Delay(-1);
@@ -34,9 +34,10 @@ namespace KylesBoot.ConsoleApplication
                 .Build();
 
             var discordConfiguration = new DiscordConfiguration();
-            configuration.Bind("DiscordConfiguration", discordConfiguration);
+            configuration.Bind(nameof(DiscordConfiguration), discordConfiguration);
             serviceCollection.AddSingleton<IDiscordConfiguration>(discordConfiguration);
 
+            // Build and return
             return serviceCollection.BuildServiceProvider();
         }
 
